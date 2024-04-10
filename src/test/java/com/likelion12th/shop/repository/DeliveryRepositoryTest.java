@@ -19,9 +19,9 @@ class DeliveryRepositoryTest {
     @DisplayName("배송 테스트")
     public void CreateDeliveryTest(){
         Delivery delivery = new Delivery();
-        delivery.setAmount(4);
-        delivery.setPrice(12500);
-        delivery.setStatus(DeliveryStatus.READY);
+        delivery.setDeliveryAmount(4);
+        delivery.setDeliveryPrice(12500);
+        delivery.setDeliveryStatus(DeliveryStatus.READY);
 
         Delivery savedDelivery = deliveryRepository.save(delivery);
         System.out.println(savedDelivery.toString());

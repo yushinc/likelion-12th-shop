@@ -17,11 +17,11 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 public class Delivery {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Integer amount;
-    private Integer price;
+    private Integer deliveryAmount;
+    private Integer deliveryPrice;
 
     @Enumerated(EnumType.STRING)
-    private DeliveryStatus status;
+    private DeliveryStatus deliveryStatus;
 
     @OneToOne
     @JoinColumn(name = "order_id")

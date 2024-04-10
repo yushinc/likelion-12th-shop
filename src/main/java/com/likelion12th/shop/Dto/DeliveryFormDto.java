@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class DeliveryFormDto {
 
-    private Integer amount;
-    private Integer price;
+    private Integer deliveryAmount;
+    private Integer deliveryPrice;
+    private String deliveryStatus;
 }
