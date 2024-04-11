@@ -11,9 +11,9 @@ import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
-@TestPropertySource(locations = "classpath:application.properties")
+    @SpringBootTest
+    @Transactional
+    @TestPropertySource(locations = "classpath:application.properties")
 class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;

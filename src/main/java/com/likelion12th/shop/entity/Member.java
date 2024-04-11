@@ -18,21 +18,17 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     private String name;
 
     @Column(unique = true)
     private String email;
-
     private String password;
-
     private String address;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
     private LocalDateTime createdBy;
-
     private LocalDateTime modifiedBy;
 
 
