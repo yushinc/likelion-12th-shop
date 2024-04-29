@@ -4,6 +4,7 @@ import com.likelion12th.shop.constant.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 @Table
 @Getter
 @Setter
+@ToString
 public class Item {
     @Id
     @Column(name = "item_id")

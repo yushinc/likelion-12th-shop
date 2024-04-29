@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="orders")
@@ -28,4 +30,7 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "member_id") // member_id라는 컬럼으로 저 member랑 조인을 하겠다.
     private Member member;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
 }
