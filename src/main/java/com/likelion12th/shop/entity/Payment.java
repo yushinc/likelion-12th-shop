@@ -1,6 +1,5 @@
 package com.likelion12th.shop.entity;
 
-import com.likelion12th.shop.constant.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,23 +8,25 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(name="payment")
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Payment {
     @Id
-    @Column(name = "item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String itemName;
-    private Integer price;
-    private Integer stock;
-    private String itemDetail;
 
-    @Enumerated(EnumType.STRING)
-    private com.likelion12th.shop.constant.itemSellStatus itemSellStatus;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    private Integer amount;
+    private Integer price;
+    private String paymentMethod;
+    private String customerId;
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
 }
+
