@@ -1,23 +1,25 @@
 package com.likelion12th.shop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "order_item")
-@Getter
+@Getter @Setter @ToString
 public class OrderItem {
     @Id
     @Column(name = "orderitem_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="item_id")
     private Item item;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="order_id")
     private Order order;
 

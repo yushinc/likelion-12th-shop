@@ -19,7 +19,7 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @Test
-    @DisplayName("상품 테스트")
+    @DisplayName("회원 테스트")
     public void CreateMemberTest(){
         Member member=new Member();
         member.setName("이민경");

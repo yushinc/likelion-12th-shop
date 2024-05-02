@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "member")
 @Getter @Setter @ToString
-public class Member {
+public class Member extends BaseTime{
     @Id
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,6 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    private LocalDateTime createdBy;
-    private LocalDateTime modifiedBy;
 
     public static Member createMember(MemberFormDto memberFormDto){
         Member member=new Member();
