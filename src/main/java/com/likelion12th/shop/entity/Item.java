@@ -24,8 +24,8 @@ public class Item {
     private Integer price;
     private Integer stock;
     private String itemDetail;
-    // private String itemImg; // 추가한 필드
-    // private String itemImgPath; // 추가한 필드
+    private String itemImg; // 추가한 필드
+    private String itemImgPath; // 추가한 필드
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
