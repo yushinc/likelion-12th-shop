@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table
@@ -22,10 +24,15 @@ public class Item {
     private Integer price;
     private Integer stock;
     private String itemDetail;
+    private String itemImg;
+    private String itemImgPath;
 
     @Enumerated(EnumType.STRING)
     private com.likelion12th.shop.constant.itemSellStatus itemSellStatus;
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItemList = new ArrayList<>();
 }

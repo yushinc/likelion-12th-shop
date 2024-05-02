@@ -5,15 +5,19 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="member")
+@EntityListeners(AuditingEntityListener.class)
 @Getter @Setter
 @ToString // 이거 설정 안하면 실행했을 때 ?로 뜸
-public class Member {
+public class Member extends BaseTime{
     @Id
     @Column(name="member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +32,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private LocalDateTime createdBy;
-    private LocalDateTime modifiedBy;
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String modifiedBy;
 
     public static Member createMember(MemberFormDto memberFormDto) {
         Member member = new Member();
