@@ -12,7 +12,6 @@ import org.springframework.test.context.TestPropertySource;
 @SpringBootTest
 @Transactional
 @TestPropertySource(locations = "classpath:application.properties")
-
 public class LikeRepositoryTest {
     @Autowired
     LikeRepository likeRepository;

@@ -2,14 +2,20 @@ package com.likelion12th.shop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import com.likelion12th.shop.constant.itemSellStatus;
+
+import lombok.Setter;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table
 @Getter
+@Setter
+@ToString
 public class Item {
+    public static Item item;
     @Id
     @Column(name="item_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -22,14 +28,14 @@ public class Item {
 
 
     @Enumerated(EnumType.STRING)
-    private itemSellStatus itemsellstatus;
+    private ItemSellStatus itemsellstatus;
 
     @OneToMany(mappedBy = "item")
     private List<CartItem> cartItems;
 
 
-
-
-    private LocalDateTime createBy;
+    private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+
 }
