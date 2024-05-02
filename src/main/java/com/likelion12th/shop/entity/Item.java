@@ -29,6 +29,10 @@ public class Item extends BaseTime {
 
     private String itemDetail;
 
+    private String itemImg;
+
+    private String itemImgPath;
+
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
