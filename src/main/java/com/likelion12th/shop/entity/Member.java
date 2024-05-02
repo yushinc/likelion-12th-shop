@@ -9,9 +9,10 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(value = {AutoCloseable.class})
 @Table(name="member")
 @Getter @Setter @ToString
-public class Member {
+public class Member extends BaseTime{
     // PK 설정
     @Id
     @Column (name = "member_id")
