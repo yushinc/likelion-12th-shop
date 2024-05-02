@@ -1,28 +1,21 @@
 package com.likelion12th.shop.entity;
 
-import com.likelion12th.shop.constant.OrderStatus;
-import com.likelion12th.shop.constant.itemSellStatus;
+import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.repository.ItemRepository;
 import com.likelion12th.shop.repository.MemberRepository;
 import com.likelion12th.shop.repository.OrderItemRepository;
 import com.likelion12th.shop.repository.OrderRepository;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.swing.plaf.synth.SynthUI;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -50,7 +43,7 @@ class OrderTest {
         item.setItemName("테스트 상품");
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
-        item.setItemSellStatus(itemSellStatus.InStock);
+        item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStock(100);
         item.setCreatedBy(LocalDateTime.now());
         item.setModifiedBy(LocalDateTime.now());

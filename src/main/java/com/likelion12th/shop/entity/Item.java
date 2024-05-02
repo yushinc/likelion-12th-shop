@@ -1,6 +1,5 @@
 package com.likelion12th.shop.entity;
 
-import com.likelion12th.shop.constant.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +27,7 @@ public class Item {
     private String itemImgPath;
 
     @Enumerated(EnumType.STRING)
-    private com.likelion12th.shop.constant.itemSellStatus itemSellStatus;
+    private com.likelion12th.shop.constant.ItemSellStatus ItemSellStatus;
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;

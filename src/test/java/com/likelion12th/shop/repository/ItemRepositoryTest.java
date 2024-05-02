@@ -1,7 +1,6 @@
 package com.likelion12th.shop.repository;
 
-import com.likelion12th.shop.constant.OrderStatus;
-import com.likelion12th.shop.constant.itemSellStatus;
+import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.entity.*;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -11,14 +10,11 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -37,7 +33,7 @@ class ItemRepositoryTest {
         item.setItemName("테스트 상품");
         item.setPrice(1000);
         item.setItemDetail("테스트 상품 상세 설명");
-        item.setItemSellStatus(itemSellStatus.InStock);
+        item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStock(100);
         item.setCreatedBy(LocalDateTime.now());
         item.setModifiedBy(LocalDateTime.now());
@@ -52,7 +48,7 @@ class ItemRepositoryTest {
             item.setItemName("테스트 상품 " + i);
             item.setPrice(1000 + i);
             item.setItemDetail("테스트 상품 상세 설명 " + i);
-            item.setItemSellStatus(itemSellStatus.InStock);
+            item.setItemSellStatus(ItemSellStatus.SELL);
             item.setStock(100);
             item.setCreatedBy(LocalDateTime.now());
             item.setModifiedBy(LocalDateTime.now());
@@ -107,7 +103,7 @@ class ItemRepositoryTest {
         QItem qItem = QItem.item;
 
         JPAQuery<Item> query = queryFactory.selectFrom(qItem)
-                .where(qItem.itemSellStatus.eq(itemSellStatus.InStock))
+                .where(qItem.ItemSellStatus.eq(ItemSellStatus.SELL))
                 .where(qItem.itemDetail.like("%" + "테스트 상품 상세 설명" + "%"))
                 .orderBy(qItem.price.desc());
 
