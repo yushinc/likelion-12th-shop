@@ -69,6 +69,7 @@ public class ItemRepositoryTest {
 }
     @Test
     @DisplayName("가격 내림차순 조회 테스트")
+
     public void findByPriceLessThanOrderByPriceDescTest(){
         this.createItemList();
         List<Item> pricelist=itemRepository.findByPriceLessThanOrderByPriceDesc(10005);
@@ -95,7 +96,7 @@ public class ItemRepositoryTest {
 
         JPAQuery<Item> query=queryFactory.selectFrom(qItem)
                 .where(qItem.itemSellStatus.eq(SellStatus.SELL))
-                .where(qItem.itemDetail.like("%"+"상세 설명"+"%"))
+                .where(qItem.itemDetail.like("%"+"상세 설명 5"+"%"))
                 .orderBy(qItem.price.desc());
         List<Item>itemList=query.fetch();
         for(Item item:itemList){
