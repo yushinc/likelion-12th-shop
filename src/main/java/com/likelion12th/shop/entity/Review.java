@@ -6,15 +6,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "review")
+@EntityListeners(value = {AuditingEntityListener.class})
 @Getter
 @Setter
 @ToString
-public class Review {
+public class Review extends BaseTime{
 
     @Id
     @Column(name = "review_id")
@@ -38,10 +38,6 @@ public class Review {
     private String content;
 
     private String imgPath;
-
-    private LocalDateTime createdBy;
-
-    private LocalDateTime modifiedBy;
 
     // ?QUA: item entity 나, member entity 에 대한 것의 정의는 id만 넣어주면 되는데 이는 어떻게 진행하면 될지 궁금합니다.
     public static Review createReview(ReviewFormDto reviewFormDto){

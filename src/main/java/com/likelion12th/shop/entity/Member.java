@@ -6,15 +6,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
+@EntityListeners(value = {AuditingEntityListener.class})
 @Getter
 @Setter
 @ToString
-public class Member {
+public class Member extends BaseTime {
 
     @Id
     @Column(name = "member_id")
@@ -32,10 +34,6 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    private LocalDateTime createdBy;
-
-    private LocalDateTime modifiedBy;
 
     public static Member createMember(MemberFormDto memberFormDto) {
         Member member = new Member();

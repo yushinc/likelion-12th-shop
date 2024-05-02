@@ -5,15 +5,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "item")
+@EntityListeners(value = {AuditingEntityListener.class})
 @Getter
 @Setter
 @ToString
-public class Item {
+public class Item extends BaseTime {
     @Id
     @Column(name = "item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +32,5 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
-    private LocalDateTime createdBy;
 
-    private LocalDateTime modifiedBy;
 }
