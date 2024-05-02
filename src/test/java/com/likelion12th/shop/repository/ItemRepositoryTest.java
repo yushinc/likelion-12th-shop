@@ -2,6 +2,11 @@ package com.likelion12th.shop.repository;
 
 import com.likelion12th.shop.constant.ItemStatus;
 import com.likelion12th.shop.entity.Item;
+import com.likelion12th.shop.entity.QItem;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ItemRepositoryTest {
     @Autowired
     ItemRepository itemRepository;
+
+    @PersistenceContext
+    EntityManager em;
 
     @Test
     @DisplayName("아이템 생성 테스트")
@@ -97,6 +105,24 @@ class ItemRepositoryTest {
     public void findByItemDetailsByPriceDescTest() {
         this.createItemList();
         List<Item> itemList = itemRepository.findByItemDetailByNative("테스트 상품 상세 설명");
+
+        for(Item item : itemList) {
+            System.out.println(item.toString());
+        }
+    }
+
+    @Test
+    @DisplayName("Querydsl 조회 테스트")
+    public void queryDslTest() {
+        this.createItemList();
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        QItem qItem = QItem.item;
+
+        JPAQuery<Item> query = queryFactory.selectFrom(qItem)
+                .where(qItem.itemSellStatus.eq(ItemStatus.SELL))
+                .where(qItem.itemDetail.like("%" + "테스트 상품 상세 설명 2" + "%"))
+                .orderBy((qItem.price.desc()));
+        List<Item> itemList = query.fetch();
 
         for(Item item : itemList) {
             System.out.println(item.toString());
