@@ -1,9 +1,9 @@
 package com.likelion12th.shop.entity;
 
 import com.likelion12th.shop.constant.OrderStatus;
-import com.likelion12th.shop.constant.itemSellStatus;
+import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.repository.ItemRepository;
-import com.likelion12th.shop.repository.LikeRepository;
+import com.likelion12th.shop.repository.MemberRepository;
 import com.likelion12th.shop.repository.OrderRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -31,12 +31,15 @@ class OrderTest {
     @Autowired
     private EntityManager em;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     public Item createItem(){
         Item item=new Item();
         item.setItemName("테스트 상품");
         item.setPrice(10000);
         item.setItemDetail("테스트 상품 상세 설명");
-        item.setItemsellstatus(itemSellStatus.SELL);
+        item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStock(100);
         item.setCreatedBy(LocalDateTime.now());
         item.setModifiedBy(LocalDateTime.now());
@@ -90,7 +93,7 @@ class OrderTest {
 
 
             //order의 주문 상품에 추가
-            order.getOrderItemList().add(orderItem);
+            //order.getOrderItemList().add(orderItem);
         }
         //회원 생성
         Member member=new Member();
@@ -112,9 +115,7 @@ class OrderTest {
     @Test
     @DisplayName("지연 로딩 테스트")
     public void lazyLoadingTest(){
-        Order order=this.createOrder();
 
-        Long orderItem
     }
 
 

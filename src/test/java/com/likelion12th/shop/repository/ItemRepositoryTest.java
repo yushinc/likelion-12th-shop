@@ -1,6 +1,9 @@
 package com.likelion12th.shop.repository;
 
 
+import com.likelion12th.shop.constant.ItemSellStatus;
+import com.likelion12th.shop.entity.Item;
+import com.likelion12th.shop.entity.QItem;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -37,7 +40,7 @@ class ItemRepositoryTest {
         item.setItemName("사과");
         item.setPrice(10000);
         item.setItemDetail("사과 한박스");
-        item.setItemsellstatus(itemSellStatus.SELL);
+        item.setItemSellStatus(ItemSellStatus.SELL);
         item.setStock(100);
         item.setCreatedBy(LocalDateTime.now());
         item.setModifiedBy(LocalDateTime.now());
@@ -52,7 +55,7 @@ class ItemRepositoryTest {
             item.setItemName("테스트 상품 " +i);
             item.setPrice(10000+i);
             item.setItemDetail("테스트 상품 상세 설명 "+i);
-            item.setItemsellstatus(itemSellStatus.SELL);
+            item.setItemSellStatus(ItemSellStatus.SELL);
             item.setStock(100);
             item.setCreatedBy(LocalDateTime.now());
             item.setModifiedBy(LocalDateTime.now());

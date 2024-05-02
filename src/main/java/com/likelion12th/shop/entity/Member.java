@@ -29,9 +29,6 @@ public class Member {
     private String password;
     private String address;
 
-    @OneToMany(mappedBy="member")
-    private List<Like> like;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 

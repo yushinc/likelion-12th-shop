@@ -1,5 +1,6 @@
 package com.likelion12th.shop.entity;
 
+import com.likelion12th.shop.constant.ItemSellStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -25,10 +26,12 @@ public class Item {
     private Integer price;
     private Integer stock;
     private String itemDetail;
+    private String itemImg;
+    private String itemImgPath;
 
 
     @Enumerated(EnumType.STRING)
-    private ItemSellStatus itemsellstatus;
+    private ItemSellStatus itemSellStatus;
 
     @OneToMany(mappedBy = "item")
     private List<CartItem> cartItems;
