@@ -32,6 +32,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
     public static Product createProduct(ProductDTO productDTO) {
         Product product = new Product();
         product.setName(productDTO.getName()); // 이름

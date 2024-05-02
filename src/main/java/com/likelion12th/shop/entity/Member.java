@@ -6,13 +6,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="member")
+@EntityListeners(AuditingEntityListener.class)
 @Getter @Setter @ToString
-public class Member {
+public class Member extends BaseTime {
 
     @Id
     @Column(name = "member_id")
@@ -31,7 +33,7 @@ public class Member {
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
-public static Member createMember(MemberFormDto memberFormDto) {
+ public static Member createMember(MemberFormDto memberFormDto) {
     Member member = new Member();
     member.setName(memberFormDto.getName()); // 이름
     member.setEmail(memberFormDto.getEmail());// 이메일
@@ -39,5 +41,8 @@ public static Member createMember(MemberFormDto memberFormDto) {
     member.setAddress(memberFormDto.getAddress());// 주소
 
     return member;
+    }
+
+    public void setMemberName(String 테스트_회원) {
     }
 }
