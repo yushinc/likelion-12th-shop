@@ -1,8 +1,10 @@
 package com.likelion12th.shop.entity;
 
 
+import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.constant.OrderStatus;
 import com.likelion12th.shop.constant.Role;
+import com.likelion12th.shop.repository.OrderRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +20,7 @@ import java.util.List;
 @Table(name = "orders")
 @Getter @Setter
 public class Order {
+
     @Id
     @Column(name="order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +41,29 @@ public class Order {
     @JoinColumn(name="member_id")
     private Member member;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItemList = new ArrayList<>(); // 초기화 추가
+
+    public List<OrderItem> getOrderItemList() {
+        return this.orderItemList;
+    }
+
+    public Item createItem(){
+        Item item = new Item();
+        item.setItemName("테스트 상품");
+        item.setPrice(10000);
+        item.setItemDetail("테스트 상품 상세 설명");
+        item.setItemSellStatus(ItemSellStatus.SELL);
+        item.setStock(100);
+        item.setCreatedBy(LocalDateTime.now());
+        item.setModifiedBy(LocalDateTime.now());
+
+        return item;
+    }
 
 }
+
+
+
+
 
