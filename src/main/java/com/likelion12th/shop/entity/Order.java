@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.nio.ByteBuffer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name="orders")
 @Getter
 @Setter
-public class Order {
+public class Order extends OrderItem {
     @Id
     @Column(name="order_id")
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -24,7 +25,8 @@ public class Order {
     @JoinColumn(name="member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL,orphanRemoval=true)
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
@@ -35,4 +37,14 @@ public class Order {
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+    public List<OrderItem> getOrderItemList() {
+        return this.orderItems;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+    }
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+    }
 }

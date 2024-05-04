@@ -47,5 +47,8 @@ public class Member {
 
         return member;
     }
+
+    public void setMemberName(String 테스트_회원) {
+    }
 }
 

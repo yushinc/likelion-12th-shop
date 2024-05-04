@@ -3,10 +3,12 @@ package com.likelion12th.shop.repository;
 
 import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.entity.Item;
+import com.likelion12th.shop.entity.Order;
 import com.likelion12th.shop.entity.QItem;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -94,6 +96,15 @@ class ItemRepositoryTest {
             System.out.println(item.toString());
         }
     }
+    @Test
+    @DisplayName("nativeQuery 속성을 이용한 상품 조회 테스트")
+    public void findByItemDetailByNative() {
+        this.createItemList();
+        List<Item> itemList = itemRepository.findByItemDetailByNative("테스트 상품 상세 설명");
+        for (Item item : itemList) {
+            System.out.println(item.toString());
+        }
+    }
 
 
     @Test
@@ -112,8 +123,14 @@ class ItemRepositoryTest {
 
         for(Item item:itemList){
             System.out.println(item.toString());
+            //break;
         }
     }
+
+
+
+
+
 
 
 }
