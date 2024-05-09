@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
+    // 상품명으로 상품 조회
+    List<Item> findByItemNameContainingIgnoreCase(String itemName);
+
     List<Item> findByItemName(String itemName);
     List<Item> findByPriceLessThanOrderByPriceDesc(Integer price);
 

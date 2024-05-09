@@ -5,7 +5,6 @@ import com.likelion12th.shop.Service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,6 +66,51 @@ public class ItemController {
             return ResponseEntity.status(e.getStatusCode()).body(null);
         } catch (Exception e) {
             // 그 외 예외 발생 시 500 에러 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 상품명으로 상품 조회
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam("itemName") String itemName) {
+        try {
+            // 상품명으로 상품 조회
+            List<ItemFormDto> itemFormDtos = itemService.getItemsByName(itemName);
+            // 조회된 상품 정보 반환
+            return ResponseEntity.ok().body(itemFormDtos);
+        } catch (Exception e) {
+            // 예외 발생 시 500 에러 반환
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    // 기존 상품 수정
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<String> updateItem(@PathVariable Long itemId,
+                                             @RequestPart(name = "itemFormDto") ItemFormDto itemFormDto,
+                                             @RequestPart(value = "itemImg", required = false) MultipartFile itemImg) {
+        try {
+            // 상품 수정
+            itemService.updateItem(itemId,itemFormDto,itemImg);
+            return ResponseEntity.ok().body("상품이 성공적으로 수정되었습니다.");
+        } catch (HttpClientErrorException e) {
+            // 찾을 수 없는 경우 에러 처리
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다.");
+        } catch (Exception e) {
+            // 그 외 예외 발생 시 에러 처리
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
+        try {
+            // 상품 삭제
+            itemService.deleteItem(itemId);
+            return ResponseEntity.ok().body("상품이 성공적으로 삭제되었습니다.");
+        } catch (HttpClientErrorException e) {
+            // 찾을 수 없는 경우 에러 처리
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다.");
+        } catch (Exception e) {
+            // 그 외 예외 발생 시 에러 처리
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
