@@ -10,7 +10,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/item")
@@ -21,9 +20,10 @@ public class ItemController {
     @PostMapping("/new")
     public ResponseEntity<Long> createItem(@RequestPart(name = "itemFormDto")ItemFormDto itemFormDto,
                                            @RequestPart(value = "itemImg", required = false)MultipartFile itemImg) {
-        // 이미지가 들어온 경우
+        // 이미지가 비어있는 경우
         if (itemImg == null) {
             try {
+                // 이미지 없는 상품을 등록
                 Long itemId = itemService.saveItem(itemFormDto);
 
                 return ResponseEntity.status(HttpStatus.CREATED).body(itemId);
@@ -48,6 +48,7 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<List<ItemFormDto>> getItems() {
+        // 아이템 반환 로직을 호출해 body에 dto 리스트를 담음
         return ResponseEntity.ok().body(itemService.getItems());
     }
 
@@ -65,4 +66,44 @@ public class ItemController {
         }
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam("itemName") String itemName) {
+        try{
+            List<ItemFormDto> itemFormDto = itemService.getItemsByName(itemName);
+
+            return ResponseEntity.ok().body(itemFormDto);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<String> updateItem(@PathVariable Long itemId,
+                                             @RequestPart(name = "itemFormDto") ItemFormDto itemFormDto,
+                                             @RequestPart(value = "itemImg", required = false) MultipartFile itemImg) {
+        try {
+            itemService.updateItem(itemId, itemFormDto, itemImg);
+            return ResponseEntity.ok().body("상품이 성공적으로 수정되었습니다");
+        }
+        catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
+        try{
+            itemService.deleteItem(itemId);
+            return ResponseEntity.ok().body("상품이 성공적으로 삭제되었습니다");
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다");
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
+

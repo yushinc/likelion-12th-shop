@@ -16,9 +16,9 @@ public class ItemFormDto {
     @NotNull
     private String itemName;
     @NotNull
-    private int price;
+    private Integer price;
     @NotNull
-    private int stock;
+    private Integer stock;
     @NotNull
     private String itemDetail;
     @NotNull
@@ -26,6 +26,7 @@ public class ItemFormDto {
 
     // get에서만 사용
     private String itemImgPath;
+
 
     private static ModelMapper modelMapper = new ModelMapper();
     // Dto -> Entity
