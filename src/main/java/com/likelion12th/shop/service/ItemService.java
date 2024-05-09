@@ -73,4 +73,60 @@ public class ItemService {
         }
     }
 
+    // 상품명으로 상품 조회
+    public List<ItemFormDto> getItemsByName(String itemName) {
+        List<Item> items = itemRepository.findByItemNameContainingIgnoreCase(itemName);
+        List<ItemFormDto> itemFormDtos = new ArrayList<>();
+        items.forEach(s -> itemFormDtos.add(ItemFormDto.of(s)));
+        return itemFormDtos;
+    }
+
+    // 상품 수정
+    public void updateItem(Long itemId, ItemFormDto itemFormDto, MultipartFile itemImg) throws Exception {
+        Optional<Item> optionalItem = itemRepository.findById(itemId);
+
+        if (optionalItem.isPresent()) {
+            Item item = itemFormDto.createItem();
+
+            if (itemFormDto.getItemName() != null) {
+                item.setItemName(itemFormDto.getItemName());
+            }
+            if (itemFormDto.getPrice() != null) {
+                item.setPrice(itemFormDto.getPrice());
+            }
+            if (itemFormDto.getItemDetail() != null) {
+                item.setItemDetail(itemFormDto.getItemDetail());
+            }
+            if (itemFormDto.getItemSellStatus() != null) {
+                item.setItemSellStatus(itemFormDto.getItemSellStatus());
+            }
+            if (itemFormDto.getStock() != null) {
+                item.setStock(itemFormDto.getStock());
+            }
+            if (itemImg != null) {
+                UUID uuid = UUID.randomUUID();
+                String fileName = uuid.toString() + "-" + itemImg.getOriginalFilename();
+                File itemImgFile = new File(uploadPath, fileName);
+                itemImg.transferTo(itemImgFile);
+                item.setItemImg(fileName);
+                item.setItemImgPath(uploadPath + "/" + fileName);
+            }
+
+            itemRepository.save(item);
+        } else {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수 없습니다." + itemId);
+        }
+    }
+
+    // 상품 삭제
+    public void deleteItem(Long itemId) {
+        Optional<Item> optionalItem = itemRepository.findById(itemId);
+
+        if (optionalItem.isPresent()) {
+            itemRepository.delete(optionalItem.get());
+        } else {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수 없습니다." + itemId);
+        }
+    }
+
 }
