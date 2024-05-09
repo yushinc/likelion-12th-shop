@@ -54,6 +54,42 @@ class OrderTest {
 
         return item;
     }
+
+    @Test
+    @DisplayName("영속성 전이 테스트")
+    public void cascadeTest() {
+        Order order = new Order();
+
+        for (int i=0; i<3; i++) {
+            Item item = this.createItem();
+            itemRepository.save(item);
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setItem(item);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+
+            order.getOrderItems().add(orderItem);
+        }
+
+        orderRepository.saveAndFlush(order);
+        em.clear();
+
+        System.out.println("order.id =" + order.getId());
+        Order savedOrder = orderRepository.findById(order.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        assertEquals(3, savedOrder.getOrderItems().size());
+    }
+
+    @Test
+    @DisplayName("고아객체 제거 테스트")
+    public void orphanRemovalTest() {
+        Order order = this.createOrder();
+        order.getOrderItems().remove(0);
+        em.flush();
+    }
+
     public Order createOrder() {
         Order order = new Order();
 
@@ -80,41 +116,6 @@ class OrderTest {
 
         return order;
     }
-    @Test
-    @DisplayName("영속성 전이 테스트")
-    public void cascadeTest() {
-        Order order = new Order();
-
-        for (int i = 0; i < 3; i++) {
-            Item item = this.createItem();
-            itemRepository.save(item);
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setItem(item);
-            orderItem.setCount(10);
-            orderItem.setOrderPrice(1000);
-            orderItem.setCreatedBy(LocalDateTime.now());
-            //주문 상품에 추가 -add 사용
-            order.getOrderItems().add(orderItem);
-
-
-        }
-        orderRepository.saveAndFlush(order);
-        em.clear();
-        Order savedOrder = orderRepository.findById(order.getId())
-                .orElseThrow(EntityNotFoundException::new);
-        assertEquals(3, order.getOrderItems().size());
-    }
-
-    @Test
-    @DisplayName("고아객체 제거 테스트")
-    public void orphanRemovalTest() {
-        Order order = this.createOrder();
-        order.getOrderItems().remove(0);
-        em.flush();
-    }
-
-
 
 
     @Test

@@ -21,7 +21,7 @@ public class Order extends OrderItem {
     private Long id;
 
     //주문 회원
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     private Member member;
 
@@ -38,13 +38,4 @@ public class Order extends OrderItem {
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
 
-    public List<OrderItem> getOrderItemList() {
-        return this.orderItems;
-    }
-
-    public void addOrderItem(OrderItem orderItem) {
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-    }
 }

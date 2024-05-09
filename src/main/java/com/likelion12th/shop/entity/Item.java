@@ -17,6 +17,7 @@ import java.util.List;
 @ToString
 public class Item {
     public static Item item;
+
     @Id
     @Column(name="item_id")
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,10 +33,6 @@ public class Item {
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
-
-    @OneToMany(mappedBy = "item")
-    private List<CartItem> cartItems;
-
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
