@@ -55,5 +55,41 @@ public class ItemController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam("itemName") String itemName){
+        try {
+            List<ItemFormDto> itemFormDtos=itemService.getItemByName(itemName);
+
+            return ResponseEntity.ok().body(itemFormDtos);
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<String>updateItem(@PathVariable("itemId")Long itemId,
+                                          @RequestPart(name = "itemFormDto") ItemFormDto itemFormDto,
+                                          @RequestPart(value = "itemImg", required = false) MultipartFile itemImg){
+        try{
+            itemService.updateItem(itemId,itemFormDto,itemImg);
+            return ResponseEntity.ok().body("상품이 성공적으로 수정되었습니다.");
+        }catch (HttpClientErrorException e){
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다.");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<String>deleteItem(@PathVariable("itemId")Long itemId){
+        try {
+            itemService.deleteItem(itemId);
+            return ResponseEntity.ok().body("상품이 성공적으로 삭제되었습니다.");
+        }catch (HttpClientErrorException e){
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다.");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }

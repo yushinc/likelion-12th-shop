@@ -6,6 +6,7 @@ import com.likelion12th.shop.repository.ItemRepository;
 import com.likelion12th.shop.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -64,4 +65,52 @@ public class ItemService {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND,"ID에 해당하는 상품을 찾을 수 없습니다."+ItemId);
         }
     }
+    public List<ItemFormDto>getItemByName(String itemName){
+        List<Item> items=itemRepository.findByItemNameContainingIgnoreCase(itemName);
+        List<ItemFormDto> itemFormDtos=new ArrayList<>();
+        items.forEach(s -> itemFormDtos.add(ItemFormDto.of(s)));
+        return itemFormDtos;
+    }
+    public void updateItem(Long itemId, ItemFormDto itemFormDto, MultipartFile itemImg)throws Exception{
+        Optional<Item> optionalItem=itemRepository.findById(itemId);
+        if(optionalItem.isPresent()){
+            Item item=optionalItem.get();
+            if(itemFormDto.getItemName()!=null){
+                item.setItemName(itemFormDto.getItemName());
+            }
+            if(itemFormDto.getPrice()!=null){
+                item.setPrice(itemFormDto.getPrice());
+            }
+            if(itemFormDto.getItemDetail() != null){
+                item.setItemDetail(itemFormDto.getItemDetail());
+            }
+            if(itemFormDto.getItemSellStatus()!=null){
+                item.setItemSellStatus(itemFormDto.getItemSellStatus());
+            }
+            if(itemFormDto.getStock()!=null){
+                item.setStock(itemFormDto.getStock());
+            }
+            if(itemImg!=null){
+                UUID uuid=UUID.randomUUID();
+                String fileName=uuid.toString()+"_"+itemImg.getOriginalFilename();
+                File itemImgFile=new File(uploadPath,fileName);
+                itemImg.transferTo(itemImgFile);
+                item.setItemImg(fileName);
+                item.setItemImgPath(uploadPath+"/"+fileName);
+            }
+            itemRepository.save(item);
+        }else{
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND,"ID에 해당하는 상품을 찾을 수 없습니다.");
+        }
+    }
+    public void deleteItem(Long itemId){
+        Optional<Item> optionalItem=itemRepository.findById(itemId);
+        if(optionalItem.isPresent()){
+            itemRepository.delete(optionalItem.get());
+        }else {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND,"id에 해당하는 상품을 찾을 수 없습니다: "+itemId);
+        }
+
+    }
+
 }

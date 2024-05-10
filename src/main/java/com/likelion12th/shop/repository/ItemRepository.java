@@ -16,5 +16,7 @@ public interface ItemRepository extends JpaRepository<Item,Long>{
             "%:itemDetail% order by i.price desc ") //i가 생각되면 안됨.
     List<Item> findByItemDetail(@Param("itemDetail") String itemDetail);
 
+    List<Item>findByItemNameContainingIgnoreCase(String itemName);
+
 
 }
