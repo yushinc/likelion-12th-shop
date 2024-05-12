@@ -53,7 +53,7 @@ public class ItemController {
 
     // 특정 상품 조회
     @GetMapping("/{itemId}")
-    public ResponseEntity<ItemFormDto> getItemById(@PathVariable Long itemId) {
+    public ResponseEntity<ItemFormDto> getItemById(@PathVariable(name = "itemId") Long itemId) {
         try {
             ItemFormDto itemFormDto = itemService.getItemById(itemId);
 
@@ -66,7 +66,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam String itemName) {
+    public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam(name = "itemName") String itemName) {
         try {
             List<ItemFormDto> itemFormDtos = itemService.getItemsByName(itemName);
             return ResponseEntity.ok().body(itemFormDtos);
@@ -75,4 +75,19 @@ public class ItemController {
         }
     }
 
+    @PatchMapping("/{itemId}")
+    public ResponseEntity<String> updateItem(
+            @PathVariable(name = "itemId") Long itemId,
+            @RequestPart(name = "itemFormDto") ItemFormDto itemFormDto,
+            @RequestPart(name = "itemImg", required = false) MultipartFile itemImg) {
+        try {
+            itemService.updateItem(itemId, itemFormDto, itemImg);
+            return ResponseEntity.ok().body("상품이 성공적으로 수정되었습니다.");
+        } catch(HttpClientErrorException e){
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다,");
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+    }
 }

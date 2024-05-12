@@ -86,4 +86,39 @@ public class ItemService {
         items.forEach(item -> itemFormDtos.add(ItemFormDto.of(item)));
         return itemFormDtos;
     }
+
+    public void updateItem(Long itemId, ItemFormDto itemFormDto, MultipartFile itemImg) throws Exception {
+        Optional<Item> optionalItem =itemRepository.findById(itemId);
+
+        if(optionalItem.isPresent()){
+            Item item = optionalItem.get();
+
+            // 항목 별 null 검사
+            if(itemFormDto.getItemName() != null){
+                item.setItemName(itemFormDto.getItemName());
+            }
+            if (itemFormDto.getPrice() != null) {
+                item.setPrice(itemFormDto.getPrice());
+            }
+            if(itemFormDto.getItemDetail() != null){
+                item.setItemDetail(itemFormDto.getItemDetail());
+            }
+            if (itemFormDto.getItemSellStatus() != null) {
+                item.setItemSellStatus(itemFormDto.getItemSellStatus());
+            }
+            if (itemFormDto.getStock() != null) {
+                item.setStock(itemFormDto.getStock());
+            }
+            if(itemImg != null){
+                UUID uuid = UUID.randomUUID();
+                String fileName = uuid.toString() + "_" + itemImg.getOriginalFilename();
+                File itemImgFile = new File(uploadPath, fileName);
+                itemImg.transferTo(itemImgFile);
+                item.setItemImg(fileName);
+                item.setItemImgPath(uploadPath + "/" +fileName);
+            }
+        } else {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수 없습니다: " + itemId);
+        }
+    }
 }
