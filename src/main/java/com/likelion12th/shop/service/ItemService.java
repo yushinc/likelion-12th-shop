@@ -20,9 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.sql.DriverManager.println;
-
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -50,7 +47,7 @@ public class ItemService {
         Item item = itemFormDto.createItem();
 
         UUID uuid = UUID.randomUUID();
-        String fileName = uuid.toString() +"_"+ itemImg.getOriginalFilename();
+        String fileName = uuid +"_"+ itemImg.getOriginalFilename();
         File itemImgFile = new File(uploadPath, fileName);
         itemImg.transferTo(itemImgFile);
         item.setItemImg(fileName);
@@ -112,7 +109,7 @@ public class ItemService {
             }
             if(itemImg != null){
                 UUID uuid = UUID.randomUUID();
-                String fileName = uuid.toString() + "_" + itemImg.getOriginalFilename();
+                String fileName = uuid + "_" + itemImg.getOriginalFilename();
                 File itemImgFile = new File(uploadPath, fileName);
                 itemImg.transferTo(itemImgFile);
                 item.setItemImg(fileName);

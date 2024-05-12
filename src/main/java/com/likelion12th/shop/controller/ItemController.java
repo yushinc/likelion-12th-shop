@@ -1,7 +1,6 @@
 package com.likelion12th.shop.controller;
 
 import com.likelion12th.shop.dto.ItemFormDto;
-import com.likelion12th.shop.entity.Item;
 import com.likelion12th.shop.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
