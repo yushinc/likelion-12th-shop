@@ -65,6 +65,7 @@ public class ItemController {
         }
     }
 
+    // 상품 이름으로 검색
     @GetMapping("/search")
     public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam(name = "itemName") String itemName) {
         try {
@@ -75,6 +76,7 @@ public class ItemController {
         }
     }
 
+    // 상품 수정
     @PatchMapping("/{itemId}")
     public ResponseEntity<String> updateItem(
             @PathVariable(name = "itemId") Long itemId,
@@ -88,6 +90,18 @@ public class ItemController {
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
 
+    // 상품 삭제
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<String> deleteItem(@PathVariable Long itemId){
+        try {
+            itemService.deleteItem(itemId);
+            return ResponseEntity.ok().body("상품이 성공적으로 삭제되었습니다.");
+        } catch (HttpClientErrorException e) {
+            return ResponseEntity.status(e.getStatusCode()).body("상품을 찾을 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }

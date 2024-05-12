@@ -87,6 +87,7 @@ public class ItemService {
         return itemFormDtos;
     }
 
+    // 상품 수정
     public void updateItem(Long itemId, ItemFormDto itemFormDto, MultipartFile itemImg) throws Exception {
         Optional<Item> optionalItem =itemRepository.findById(itemId);
 
@@ -119,6 +120,17 @@ public class ItemService {
             }
         } else {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수 없습니다: " + itemId);
+        }
+    }
+
+    // 상품 삭제
+    public void deleteItem(Long itemId) {
+        Optional<Item> optionalItem = itemRepository.findById(itemId);
+
+        if(optionalItem.isPresent()){
+            itemRepository.delete(optionalItem.get());
+        } else {
+            throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수 없습니다.");
         }
     }
 }
