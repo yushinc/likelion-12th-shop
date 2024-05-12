@@ -7,6 +7,7 @@ import com.likelion12th.shop.repository.ItemRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.sql.DriverManager.println;
+
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class ItemService {
     @Value("${uploadPath}")
     private String uploadPath;
 
+    @Autowired
     private final ItemRepository itemRepository;
 
     // 이미지 없이 상품 등록
@@ -72,5 +77,13 @@ public class ItemService {
         }else {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수없습니다: " + itemId);
         }
+    }
+
+    // 상품명으로 상품 조회
+    public List<ItemFormDto> getItemsByName(String itemName){
+        List<Item> items = itemRepository.findByItemNameContainingIgnoreCase(itemName);
+        List<ItemFormDto> itemFormDtos = new ArrayList<>();
+        items.forEach(item -> itemFormDtos.add(ItemFormDto.of(item)));
+        return itemFormDtos;
     }
 }
