@@ -1,6 +1,8 @@
 package com.likelion12th.shop.entity;
 
 import com.likelion12th.shop.constant.OrderStatus;
+import com.likelion12th.shop.repository.MemberRepository;
+import com.likelion12th.shop.repository.OrderRepository;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
@@ -25,7 +27,7 @@ public class Order {
     private LocalDateTime OrderDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus OrderStatus;
+    private OrderStatus orderStatus;
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
@@ -42,8 +44,36 @@ public class Order {
     //private List<OrderItem> orderItems = new ArrayList<>();
 
     public void addOrderItem(OrderItem orderItem) {
-        this.orderItemList.add(orderItem);
+        orderItemList.add(orderItem);
         orderItem.setOrder(this);
+    }
+
+    public static Order createOrder(Member member, List<OrderItem> orderItemList) {
+        Order order = new Order();
+        order.setMember(member);
+
+        for(OrderItem orderItem : orderItemList) {
+            order.addOrderItem(orderItem);
+        }
+
+        order.setOrderStatus(com.likelion12th.shop.constant.OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItemList) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
+    public void cancelOrder() {
+        this.orderStatus = OrderStatus.CANCEL;
+        for (OrderItem orderItem : orderItemList) {
+            orderItem.cancel();
+        }
     }
 }
 

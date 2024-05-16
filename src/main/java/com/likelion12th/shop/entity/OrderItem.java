@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.aspectj.weaver.ast.Or;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,4 +34,23 @@ public class OrderItem {
     private int count;
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+    public static OrderItem createOrderItem (Item item, int count) {
+        OrderItem orderItem = new OrderItem();
+
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOrderPrice(item.getPrice());
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public int getTotalPrice() {
+        return orderPrice * count;
+    }
+
+    public void cancel() {
+        this.getItem().addStock(count);
+    }
 }

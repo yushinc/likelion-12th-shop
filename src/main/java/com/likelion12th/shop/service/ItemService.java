@@ -128,5 +128,4 @@ public class ItemService {
             throw new HttpClientErrorException(HttpStatus.NOT_FOUND, "ID에 해당하는 상품을 찾을 수 없습니다." + itemId);
         }
     }
-
 }
