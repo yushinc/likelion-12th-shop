@@ -87,7 +87,7 @@ public class ItemService {
         // 엔티티 리스트 -> 디티오 리스트로 변경 시 담을 디티오 리스트 선언
         List<ItemFormDto> itemFormDtos = new ArrayList<>();
         // 아이템 리스트를 순회하며 디티오로 변환하여 선언된 리스트에 담음
-        items.forEach(s -> itemFormDtos.add(ItemFormDto.of(s)));
+        items.forEach(s -> itemFormDtos.add(ItemFormDto.of(s))); // 각 상품 정보를 ItemFormDto로 변환하여 리스트에 추가
         // 디티오 리스트 변환
         return itemFormDtos;
     }

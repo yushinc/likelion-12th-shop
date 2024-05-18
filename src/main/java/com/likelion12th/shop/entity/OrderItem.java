@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.aspectj.bridge.MessageUtil;
-
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "order_item")
@@ -39,12 +40,27 @@ public class OrderItem {
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
 
-    public void setPrice(int i) {
+    public static OrderItem createOrderItem(Item item, int count){
+        OrderItem orderItem = new OrderItem();
+
+        // 주문할 상품 세팅
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOrderPrice(item.getPrice());
+
+        item.removeStock(count);
+        return orderItem;
     }
 
-    public void setQuantity(int i) {
+    // 주문 가격과 주문 수량을 곱해서 주문 총 가격을 계산
+    public int getTotalPrice(){
+
+        return orderPrice*count;
     }
 
-    public void setOrderQuantity(int i) {
+    public void cancel() {
+
+        this.getItem().addStock(count);
     }
 }
+
