@@ -16,11 +16,11 @@ public class OrderItem {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="item_id")
+    @JoinColumn(name = "item_id")
     private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="order_id")
+    @JoinColumn(name = "order_id")
     private Order order;
 
     private Integer oderPrice;
@@ -28,5 +28,18 @@ public class OrderItem {
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
 
-
+    public static OrderItem createOrderItem(Item item, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setCount(count);
+        orderItem.setOderPrice(item.getPrice());
+        item.removeStock(count);
+        return orderItem;
+    }
+    public int getTotalPrice(){
+        return count*oderPrice;
+    }
+    public void cancel(){
+        this.getItem().addStock(count); //count만큼 주문하고 다시 취소
+    }
 }
