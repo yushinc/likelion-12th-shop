@@ -9,6 +9,8 @@ import com.likelion12th.shop.entity.Item;
 @Getter
 @Setter
 public class ItemFormDto {
+
+    //등록한 상품 이미지 경로를 반환하기 위한 필드 추가
     private String itemImgPath;
 
     private  Long id;

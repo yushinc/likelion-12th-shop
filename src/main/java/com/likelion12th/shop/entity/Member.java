@@ -36,7 +36,7 @@ public class Member {
     private LocalDateTime modifiedBy;
 
 
-
+//엔티티 생성 메소드
     public static Member createMember(MemberFormDto memberFormDto){
         Member member= new Member();
         member.setName(memberFormDto.getName());

@@ -2,7 +2,6 @@ package com.likelion12th.shop.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

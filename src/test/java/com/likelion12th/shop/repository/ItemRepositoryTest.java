@@ -47,6 +47,7 @@ class ItemRepositoryTest {
         item.setCreatedBy(LocalDateTime.now());
         item.setModifiedBy(LocalDateTime.now());
 
+        // Item 객체를 저장소에 저장하고 저장된 객체를 반환
         Item savedItem=itemRepository.save(item);
         System.out.println(savedItem.toString());
     }
@@ -62,6 +63,7 @@ class ItemRepositoryTest {
             item.setCreatedBy(LocalDateTime.now());
             item.setModifiedBy(LocalDateTime.now());
 
+            // Item 객체를 저장소에 저장
             Item savedItem=itemRepository.save(item);
         }
     }
@@ -70,6 +72,8 @@ class ItemRepositoryTest {
     @DisplayName("상품명 조회 테스트")
     public void findByItemNameTest(){
         this.createItemList();
+
+        //상품명이 "테스트 상품 1"인 상품을 조회
         List<Item> itemList=itemRepository.findByItemName("테스트 상품 1");
         for(Item item : itemList){
             System.out.println(item.toString());
@@ -80,6 +84,8 @@ class ItemRepositoryTest {
     @DisplayName("가격 내림차순 조회 테스트")
     public void findByPriceLessThanOrderByDescTest(){
         this.createItemList();
+
+        //가격이 10005보다 작은 상품의 가격을 내림차순으로 조회
         List<Item> itemList=itemRepository.findByPriceLessThanOrderByPriceDesc(10005);
         for(Item item : itemList){
             System.out.println(item.toString());
