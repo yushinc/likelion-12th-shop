@@ -29,4 +29,24 @@ public class OrderItem  extends BaseTime{
 
     private Integer count;
 
+    public static OrderItem createOrderItem(Item item, Integer count){
+        OrderItem orderItem = new OrderItem();
+
+        orderItem.setItem(item);
+
+        orderItem.setCount(count);
+
+        orderItem.setOrderPrice(item.getPrice());
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    public int getTotalPrice(){
+        return orderPrice*count;
+    }
+
+    public void cancel() {
+        this.getItem().addStock(count);
+    }
 }
