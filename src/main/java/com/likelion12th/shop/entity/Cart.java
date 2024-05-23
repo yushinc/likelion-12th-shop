@@ -21,4 +21,10 @@ public class Cart {
     @OneToOne
     @JoinColumn(name = "member_id") // cart 테이블에 외래키 이름 지정
     private Member member;
+
+    public static Cart createCart(Member member) {
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 }
