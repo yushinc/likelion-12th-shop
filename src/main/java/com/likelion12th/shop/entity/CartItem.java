@@ -1,12 +1,13 @@
 package com.likelion12th.shop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cart_item")
-@Getter
+@Getter @Setter
 public class CartItem {
     @Id
     @Column(name = "cartitem_id")
@@ -24,6 +25,21 @@ public class CartItem {
     private Integer count;
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+    public static CartItem createCartItem(Cart cart,Item item, int count){
+        CartItem cartItem=new CartItem();
+        cartItem.setCart(cart);
+        cartItem.setItem(item);
+        cartItem.setCount(count);
+
+        return cartItem;
+    }
+    public void addCount(int count){
+        this.count+=count;
+    }
+    public void updateCount(int count){
+        this.count=count;
+    }
 
 
 }

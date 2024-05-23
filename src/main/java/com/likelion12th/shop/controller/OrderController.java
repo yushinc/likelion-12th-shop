@@ -33,9 +33,9 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderItemDto> getOrderDetails(@PathVariable("orderId") Long orderId,@RequestParam("email") String email){
-        OrderItemDto orderItemDto=orderService.getOrderDetails(orderId,email);
-        return ResponseEntity.ok(orderItemDto);
+    public ResponseEntity<List<OrderItemDto>> getOrderDetails(@PathVariable("orderId") Long orderId,@RequestParam("email") String email){
+        List<OrderItemDto> orderItemDtos=orderService.getOrderDetails(orderId,email);
+        return ResponseEntity.ok(orderItemDtos);
     }
 
     @GetMapping("/{orderId}/cancel")

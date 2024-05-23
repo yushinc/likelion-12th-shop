@@ -1,26 +1,20 @@
 package com.likelion12th.shop.Service;
 
-import com.likelion12th.shop.dto.ItemFormDto;
-import com.likelion12th.shop.dto.OrderDto;
-import com.likelion12th.shop.dto.OrderItemDto;
-import com.likelion12th.shop.dto.OrderReqDto;
-import com.likelion12th.shop.entity.Item;
-import com.likelion12th.shop.entity.Member;
-import com.likelion12th.shop.entity.Order;
-import com.likelion12th.shop.entity.OrderItem;
-import com.likelion12th.shop.repository.ItemRepository;
-import com.likelion12th.shop.repository.MemberRepository;
-import com.likelion12th.shop.repository.OrderItemRepository;
-import com.likelion12th.shop.repository.OrderRepository;
+import com.likelion12th.shop.dto.*;
+import com.likelion12th.shop.entity.*;
+import com.likelion12th.shop.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+
 public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
@@ -52,7 +46,7 @@ public class OrderService {
 
         return OrderDtos;
     }
-    public OrderItemDto getOrderDetails(Long orderId, String email){
+    public List<OrderItemDto> getOrderDetails(Long orderId, String email){ //dto->dto 형태의 리스트로 반환
         Order order=orderRepository.findById(orderId)
                 .orElseThrow(()->new IllegalArgumentException("주문 ID 없음 : "+orderId));
         if(!Objects.equals(order.getMember().getEmail(), email)){
@@ -60,10 +54,12 @@ public class OrderService {
         }
         List<OrderItem>orderItems=order.getOrderItemlist();
         if(!orderItems.isEmpty()){
-            OrderItem orderItem=orderItems.get(0);
-
-
-            return OrderItemDto.of(orderItem);
+            // orderItems 리스트를 스트림으로 변환
+            return orderItems.stream()
+                    // orderItem 객체를 OrderItemDto 객체로 변환
+                    .map(OrderItemDto::of)
+                    // 변환된 OrderItemDto 객체들을 리스트로
+                    .collect(Collectors.toList());
         }else {
             throw new IllegalArgumentException("주문 아이템이 없음");
         }
@@ -79,6 +75,22 @@ public class OrderService {
 
         orderRepository.save(order);
 
-
     }
+    public Long orders(List<OrderReqDto> orderDtoList, String email){ //주문하기
+        Member member=memberRepository.findByEmail(email);
+        List<OrderItem> orderItemList=new ArrayList<>();
+
+        for(OrderReqDto orderReqDto:orderDtoList){
+            Item item=itemRepository.findById(orderReqDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem=OrderItem.createOrderItem(item,orderReqDto.getCount());
+            orderItemList.add(orderItem);
+        }
+        Order order=Order.createOrder(member, orderItemList);
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
 }

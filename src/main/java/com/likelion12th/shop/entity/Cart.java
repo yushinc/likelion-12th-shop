@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "cart")
-@Getter
+@Getter @Setter
 public class Cart {
     @Id
     @Column(name = "cart_id")
@@ -20,6 +20,12 @@ public class Cart {
     private Member member;
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+    public static Cart createCart(Member member){
+        Cart cart=new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 
 
 }
