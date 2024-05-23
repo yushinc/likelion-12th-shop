@@ -22,7 +22,7 @@ import java.util.List;
 public class Order {
 
     @Id
-    @Column(name="order_id")
+    @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -38,7 +38,7 @@ public class Order {
     private Delivery delivery;
 
     @ManyToOne
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,7 +48,7 @@ public class Order {
         return this.orderItemList;
     }
 
-    public Item createItem(){
+    public Item createItem() {
         Item item = new Item();
         item.setItemName("테스트 상품");
         item.setPrice(10000);
@@ -59,6 +59,48 @@ public class Order {
         item.setModifiedBy(LocalDateTime.now());
 
         return item;
+    }
+
+    //orderItemList에 주문 상품 정보를 담는다.
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItemList.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+
+    //회원과 아이템 아이템 리스트로 주문 생성하기
+
+    public static Order createOrder(Member member, List<OrderItem> orderItemList) {
+        Order order = new Order();
+        order.setMember(member);
+
+        for (OrderItem orderItem : orderItemList) {
+            order.addOrderItem(orderItem);
+        }
+
+        //주문 상태를 ORDER로 세팅한다.
+        order.setOrderStatus(OrderStatus.ORDER);
+        //현재 시간을 주문시간으로 세팅한다.
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = 0;
+        for(OrderItem orderItem : orderItemList){
+            //orderItem에서 메소드 호출
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
+    //주문 객체의 상태를 "취소"로 변경하고, 주문에 포함된 각 주문 아이템에 대해 취소 처리를 수행하는 기능을 구현
+    public void cancelOrder() {
+        this.orderStatus = OrderStatus.CANCEL;
+        for (OrderItem orderItem : orderItemList){
+            orderItem.cancel();
+        }
     }
 
 }

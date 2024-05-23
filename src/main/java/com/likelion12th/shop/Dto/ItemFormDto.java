@@ -1,5 +1,6 @@
 package com.likelion12th.shop.Dto;
 
+import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.entity.Item;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +19,7 @@ public class ItemFormDto {
     @NotNull
     private Integer stock;
     @NotNull
-    private String itemSellStatus;
+    private ItemSellStatus itemSellStatus;
     @NotNull
     private String itemDetail;
 

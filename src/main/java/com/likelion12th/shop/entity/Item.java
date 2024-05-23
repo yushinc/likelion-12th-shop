@@ -1,5 +1,6 @@
 package com.likelion12th.shop.entity;
 
+import com.likelion12th.shop.Exception.OutOfStockException;
 import com.likelion12th.shop.constant.ItemSellStatus;
 import com.likelion12th.shop.constant.Role;
 import jakarta.persistence.*;
@@ -31,5 +32,17 @@ public class Item {
     @Enumerated(EnumType.STRING)  //enum으로 설정한 코드
     private ItemSellStatus itemSellStatus;
 
+    //상품의 재고를 감소시키는 로직
+    public void removeStock(int stock) {
+        int restStock = this.stock - stock;
+        if (restStock < 0) {
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량: " + this.stock + ")");
+        }
+        this.stock = restStock;
+    }
 
+    //주문 취소 시 상품의 재고를 증가시키는 로직
+    public void addStock(int stock) {this.stock += stock; }
 }
+
+

@@ -21,5 +21,8 @@ public interface ItemRepository extends JpaRepository<Item,Long> {
     //가격보다 작은 가격을 가진 상품을 내림차순으로 정렬하여 조회
     List<Item> findByPriceLessThanOrderByPriceDesc(Integer price);
 
+    List<Item> findByItemNameContainingIgnoreCase(String itemName);
+
+
 }
 
