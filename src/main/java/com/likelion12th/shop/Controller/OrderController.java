@@ -44,13 +44,15 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    // 주문 상세 조회
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderItemDto> getOrderDetails(@PathVariable Long orderId, @RequestParam String email) {
-        OrderItemDto orderItemDto = orderService.getOrderDetails(orderId,email);
+    public ResponseEntity<List<OrderItemDto>> getOrderDetails(@PathVariable Long orderId, @RequestParam String email) {
+        // OrderId, Email로 특정 주문의 상세 정보를 조회
+        List<OrderItemDto> orderItemDtos = orderService.getOrderDetails(orderId, email);
 
         // 주문 상세 정보를 클라이언트에 반환
-        return ResponseEntity.ok(orderItemDto);
-        }
+        return ResponseEntity.ok(orderItemDtos);
+    }
 
     // 주문 취소
     @GetMapping("/{orderId}/cancel")

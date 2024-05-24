@@ -53,7 +53,7 @@ public class ItemService {
         File itemImgFile = new File(uploadPath, fileName);
         itemImg.transferTo(itemImgFile);
         item.setItemImg(fileName);
-        item.setItemImgPath(uploadPath + "/" + fileName);
+        item.setItemImgPath(uploadPath + "/" + fileName);  // 확인: itemImgPath 설정
         itemRepository.save(item);
 
         return item.getId();

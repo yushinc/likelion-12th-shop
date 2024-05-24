@@ -22,4 +22,10 @@ public class Cart {
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
+
+    public static Cart createCart(Member member) {
+        Cart cart = new Cart();
+        cart.setMember(member);
+        return cart;
+    }
 }
