@@ -11,11 +11,13 @@ import com.likelion12th.shop.repository.ItemRepository;
 import com.likelion12th.shop.repository.MemberRepository;
 import com.likelion12th.shop.repository.OrderItemRepository;
 import com.likelion12th.shop.repository.OrderRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +59,7 @@ public class OrderService {
         return orderDtos;
     }
 
-    public OrderItemDto getOrderDetails(Long orderId, String email) {
+    public List<OrderItemDto> getOrderDetails(Long orderId, String email) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("주문 ID 없음: " + orderId));
 
@@ -69,8 +71,10 @@ public class OrderService {
         if(! orderItems.isEmpty()) {
             OrderItem orderItem = orderItems.get(0);
 
-            // OrderItemDto 객체로 변환해 반환
-            return OrderItemDto.of(orderItem);
+//            // OrderItemDto 객체로 변환해 반환
+//            return OrderItemDto.of(orderItem);
+            // orderItems 리스트를 스트림으로 변환
+            return orderItems.stream().map(OrderItemDto::of).collect(Collectors.toList());
         }
         else {
             throw new IllegalArgumentException("주문 아이템이 없음");
@@ -87,6 +91,26 @@ public class OrderService {
 
         order.cancelOrder();
         orderRepository.save(order);
+    }
+
+    public Long orders(List<OrderReqDto> orderDtoList, String email) {
+        // 이메일로 회원 조회
+        Member member = memberRepository.findByEmail(email);
+
+        // 주문 아이템 리스트 생성
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        for (OrderReqDto orderReqDto : orderDtoList) {
+            Item item = itemRepository.findById(orderReqDto.getItemId()).orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderReqDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(member, orderItemList);
+        orderRepository.save(order);
+
+        return order.getId();
     }
 
 
