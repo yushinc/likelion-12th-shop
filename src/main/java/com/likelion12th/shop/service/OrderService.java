@@ -11,12 +11,15 @@ import com.likelion12th.shop.repository.ItemRepository;
 import com.likelion12th.shop.repository.MemberRepository;
 import com.likelion12th.shop.repository.OrderItemRepository;
 import com.likelion12th.shop.repository.OrderRepository;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.bytebuddy.pool.TypePool;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.hibernate.internal.util.collections.ArrayHelper.forEach;
 
@@ -85,7 +88,7 @@ public class OrderService {
     }
 
     //주문 상세 조회
-    public OrderItemDto getOrderDetails(Long orderId, String email){
+    public List<OrderItemDto> getOrderDetails(Long orderId, String email){
         Order order=orderRepository.findById(orderId)
                 .orElseThrow(()->new IllegalArgumentException("주문 ID 없음 : "+orderId));
 
@@ -95,9 +98,9 @@ public class OrderService {
         List<OrderItem> orderItems=order.getOrderItemList();
 
         if(!orderItems.isEmpty()){
-            OrderItem orderItem = orderItems.get(0);
-
-            return OrderItemDto.of(orderItem);
+            return orderItems.stream()
+                    .map(OrderItemDto::of)
+                    .collect(Collectors.toList());
         } else{
             throw new IllegalArgumentException("주문 아이템이 없음");
         }
@@ -114,8 +117,32 @@ public class OrderService {
         order.cancelOrder();
         orderRepository.save(order);
 
+    }
 
+    //장바구니 주문
+    public Long orders(List<OrderReqDto> orderDtoList, String email){
+        //이메일로 회원 조회
+        Member member=memberRepository.findByEmail(email);
+        //주문할 상품 목록을 담을 리스트 생성
+        List<OrderItem> orderItems=new ArrayList<>();
 
+        //OrderReqDto 리스트를 순회하며 주문 아이템 생성
+        for (OrderReqDto orderReqDto : orderDtoList){
+            //주문할 상품의 ID로 상품 조회
+            Item item=itemRepository.findById(orderReqDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            //"주문 아이템 생성" 하여 리스트에 추가(hint : 엔티티에 작성한 메서드 사용)
+            OrderItem orderItem = OrderItem.createOrderItem(item,orderReqDto.getCount());
+            orderItems.add(orderItem);
+        }
+        //회원과 주문 상품 목록으로 주문 객체 생성
+        Order order=Order.createOrder(member,orderItems);
+        //주문 저장
+        orderRepository.save(order);
+
+        //생성된 주문의 ID 반환
+        return order.getId();
     }
 
 

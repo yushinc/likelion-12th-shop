@@ -36,10 +36,10 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderItemDto> getOrderDetails(@PathVariable Long orderId,@RequestParam("email") String email){
+    public ResponseEntity<List<OrderItemDto>> getOrderDetails(@PathVariable Long orderId,@RequestParam("email") String email){
 
-        OrderItemDto orderItemDto = orderService.getOrderDetails(orderId, email);
-        return ResponseEntity.ok(orderItemDto);
+        List<OrderItemDto> orderItemDtos = orderService.getOrderDetails(orderId, email);
+        return ResponseEntity.ok(orderItemDtos);
     }
 
     @GetMapping("/{orderId}/cancel")
