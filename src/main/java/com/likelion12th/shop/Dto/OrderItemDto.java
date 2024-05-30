@@ -1,9 +1,12 @@
 package com.likelion12th.shop.Dto;
 
-import com.likelion12th.shop.entity.Item;
 import com.likelion12th.shop.entity.OrderItem;
+import lombok.Getter;
+import lombok.Setter;
 import org.modelmapper.ModelMapper;
 
+@Getter
+@Setter
 public class OrderItemDto {
     private Long itemId;
     private String itemName;
@@ -15,10 +18,10 @@ public class OrderItemDto {
 
     //  ModelMapper를 사용하여 OrderItem 객체를 OrderItemDto 클래스로 매핑
     public static OrderItemDto of(OrderItem orderItem) {
-            return modelMapper.map(orderItem, OrderItemDto.class);
-        }
-
+        OrderItemDto orderItemDto = modelMapper.map(orderItem, OrderItemDto.class);
+        return orderItemDto;
     }
+}
 
 
 

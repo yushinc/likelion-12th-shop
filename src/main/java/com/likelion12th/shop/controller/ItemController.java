@@ -1,16 +1,11 @@
 package com.likelion12th.shop.controller;
 
 import com.likelion12th.shop.Dto.ItemFormDto;
-import com.likelion12th.shop.repository.ItemRepository;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.Repository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import com.likelion12th.shop.service.ItemService;
+import com.likelion12th.shop.Service.ItemService;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +23,9 @@ public class ItemController {
                                            @RequestPart(value = "itemImg", required = false) MultipartFile itemImg) {
         if (itemImg == null) {
             try {
+                //새로운 아이템 저장
                 Long itemId = itemService.saveItem(itemFormDto);
+                //저장된 아이템의 아이디 변환
                 return ResponseEntity.status(HttpStatus.CREATED).body(itemId);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -44,13 +41,14 @@ public class ItemController {
         }
     }
 
+    // 전체 상품 조회
     @GetMapping
     public ResponseEntity<List<ItemFormDto>> getItems() {
         return ResponseEntity.ok().body(itemService.getItems());
     }
 
-    //postman post 보낼때 실행 중인 상태에서 들어가서 send 눌러야함.
     // key 이름은 위에 @RequestPart(name="itemForm") 이거랑 동일해야함. 다르면 안됨!
+    //특정 상품 조회
     @GetMapping("/{itemId}")
     public ResponseEntity<ItemFormDto> getItemById(@PathVariable Long itemId) {
         try {
@@ -65,7 +63,7 @@ public class ItemController {
         }
     }
 
-
+    //상품명으로 상품 조회
     @GetMapping("/search")
     public ResponseEntity<List<ItemFormDto>> searchItemsByName(@RequestParam("itemName") String itemName) {
         try {
@@ -79,7 +77,7 @@ public class ItemController {
         }
     }
 
-
+    // 기존 상품 수정
     @PatchMapping("/{itemId}") // 위에서 상품등록 @RequestPart로 설정했으므로
     public ResponseEntity<String> updateItem(@PathVariable Long itemId,
                                              @RequestPart(name = "itemFormDto") ItemFormDto itemFormDto,
@@ -97,6 +95,7 @@ public class ItemController {
         }
     }
 
+    // 상품 삭제
     @DeleteMapping("/{itemId}")
     public ResponseEntity<String> deleteItem(@PathVariable Long itemId){
         try{
@@ -110,6 +109,8 @@ public class ItemController {
             //그 외 예외 발생 시 에러 처리
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
+
     }
 
 }

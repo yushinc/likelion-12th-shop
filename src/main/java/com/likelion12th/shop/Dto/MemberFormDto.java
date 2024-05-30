@@ -5,9 +5,9 @@ import lombok.Setter;
 
 @Getter @Setter
 public class MemberFormDto {
-
+    private String shop12;
     private String name;
-    private String ID;
+    private String email;
     private String password;
     private String address;
 }

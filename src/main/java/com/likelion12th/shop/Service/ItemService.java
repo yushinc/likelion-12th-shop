@@ -1,16 +1,18 @@
-package com.likelion12th.shop.service;
+package com.likelion12th.shop.Service;
 
 import com.likelion12th.shop.Dto.ItemFormDto;
 import com.likelion12th.shop.entity.Item;
 import com.likelion12th.shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
+import static com.likelion12th.shop.entity.QItem.item;
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
+
 
 
 import java.io.File;
@@ -53,6 +55,7 @@ public class ItemService {
         return item.getId();
     }
 
+    //전체 상품 조회
     //여기 메서드 잘못선언해서 오류났던거임...
     public List<ItemFormDto> getItems() {
         List<Item> items = itemRepository.findAll(); // 모든 상품 조회
@@ -61,6 +64,7 @@ public class ItemService {
         return itemFormDtos; // DTO 리스트 반환
     }
 
+    //특정 상품 조회
     public ItemFormDto getItemById(Long itemId) {
         //아이템 ID로 아이템을 조회
         Optional<Item> optionalItem = itemRepository.findById(itemId);
@@ -77,6 +81,7 @@ public class ItemService {
     public void updateItem(Long itemId, ItemFormDto itemFormDto, MultipartFile itemImg) throws Exception {
         //아이템 ID로 아이템을 조회 - NPE 방지를 위한 객체 포장
         Optional<Item> optionalItem = itemRepository.findById(itemId);
+
         if (optionalItem.isPresent()) {
             Item item = optionalItem.get();
 
@@ -98,6 +103,7 @@ public class ItemService {
                 item.setStock(itemFormDto.getStock());
             }
 
+            //이미지 업데이트
             if (itemImg != null) {
                 UUID uuid = UUID.randomUUID();
                 String fileName = uuid.toString() + "_" + itemImg.getOriginalFilename();
@@ -113,7 +119,7 @@ public class ItemService {
         }
     }
 
-
+    //상품명으로 상품 조회
     public List<ItemFormDto> getItemsByName(String itemName) {
         //쿼리메소드 호출하여 해당하는 아이템 리스트 반환하여 저장
         // findByItem 쿼리를 사용하면 아예 똑같은 itemName만 반환. 특정단어 포함 itemName 반환하려고 우리가 itemRepository에 findByItemNameContainingIgnoreCas 쿼리 만들었던 것. 그걸 불러와야지!
@@ -126,6 +132,7 @@ public class ItemService {
         return itemFormDtos;
     }
 
+    //상품 삭제
     public void deleteItem(Long itemId) {
         Optional<Item> optionalItem = itemRepository.findById(itemId);
 

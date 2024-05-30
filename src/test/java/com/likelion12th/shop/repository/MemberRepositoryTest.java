@@ -14,12 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @TestPropertySource(locations = "classpath:application.properties")
 public class MemberRepositoryTest {
+
     @Autowired
     MemberRepository memberRepository;
 
     @Test
     @DisplayName("회원가입 테스트")
-    public void createMemberTest() {
+    public void createMember() {
         Member member = new Member();
         member.setName("염정");
         member.setEmail("jung@likelion.com");

@@ -5,17 +5,17 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
-@EntityListeners(value = {AuditingEntityListener.class})
-@MappedSuperclass
+@EnableJpaAuditing
+@EntityListeners(value ={AuditingEntityListener.class})
+@MappedSuperclass // Entity 클래스들이 BaseTimeEntity을 상속할 경우 필드들 (createdDate, modifiedDate)도 컬럼으로 인식하도록 함.
 @Getter @Setter
-@ToString
 public abstract class BaseTime {
 
     @CreatedDate
