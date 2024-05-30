@@ -36,6 +36,7 @@ public class ItemService {
 
         // 상품 등록
         Item item = itemFormDto.createItem();
+        itemRepository.save(item);
 
         return item.getId();
     }
