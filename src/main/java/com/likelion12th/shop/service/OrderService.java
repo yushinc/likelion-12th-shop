@@ -1,32 +1,15 @@
 package com.likelion12th.shop.service;
 
 
-import com.likelion12th.shop.constant.OrderStatus;
-import com.likelion12th.shop.dto.ItemFormDto;
-import com.likelion12th.shop.dto.OrderDto;
-import com.likelion12th.shop.dto.OrderItemDto;
-import com.likelion12th.shop.dto.OrderReqDto;
-import com.likelion12th.shop.entity.Item;
-import com.likelion12th.shop.entity.Member;
-import com.likelion12th.shop.entity.Order;
-import com.likelion12th.shop.entity.OrderItem;
-import com.likelion12th.shop.repository.ItemRepository;
-import com.likelion12th.shop.repository.MemberRepository;
-import com.likelion12th.shop.repository.OrderItemRepository;
-import com.likelion12th.shop.repository.OrderRepository;
-import jakarta.transaction.Transactional;
+import com.likelion12th.shop.dto.*;
+import com.likelion12th.shop.entity.*;
+import com.likelion12th.shop.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.boot.model.naming.IllegalIdentifierException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +35,8 @@ public class OrderService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("상품 ID 없음 : " + itemId));
 
+
+        // QUA?? order id 지정해주지 않아도 괜찮은 건가?
         OrderItem orderItem = OrderItem.createOrderItem(item, orderReqDto.getCount());
 
         List<OrderItem> orderItems = new ArrayList<>();
@@ -73,7 +58,7 @@ public class OrderService {
         return orderDtos;
     }
 
-    public OrderItemDto getOrderDetails(Long orderId, String email) {
+    public List<OrderItemDto> getOrderDetails(Long orderId, String email) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("주문 ID 없음 : " + orderId));
 
@@ -84,9 +69,10 @@ public class OrderService {
         List<OrderItem> orderItems = order.getOrderItemList();
 
         if (!orderItems.isEmpty()) {
-            OrderItem orderItem = orderItems.get(0);
-
-            return OrderItemDto.of(orderItem);
+            // orderItems 리스트를 스트림으로 변환
+            return orderItems.stream()
+                    .map(OrderItemDto::of)
+                    .collect(Collectors.toList());
         } else {
             throw new IllegalArgumentException("주문 아이템이 없음");
         }
@@ -103,6 +89,25 @@ public class OrderService {
         order.cancelOrder();
 
         orderRepository.save(order);
+    }
+
+    public Long orders(List<OrderReqDto> orderDtoList, String email){
+        Member member = memberRepository.findByEmail(email);
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+
+        for(OrderReqDto orderReqDto: orderDtoList){
+            Item item = itemRepository.findById(orderReqDto.getItemId())
+                    .orElseThrow(EntityNotFoundException::new);
+
+            OrderItem orderItem = OrderItem.createOrderItem(item, orderReqDto.getCount());
+            orderItemList.add(orderItem);
+        }
+
+        Order order = Order.createOrder(member, orderItemList);
+
+        orderRepository.save(order);
+        return order.getId();
     }
 
 }
