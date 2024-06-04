@@ -6,13 +6,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
 @Getter @Setter @ToString
-public class Member extends BaseTime{
+public class Member extends Base{
     @Id
     @Column(name = "member_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,15 +28,28 @@ public class Member extends BaseTime{
 
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    public static Member createMember(MemberFormDto memberFormDto){
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member=new Member();
         member.setName(memberFormDto.getName());
-        member.setEmail(member.getEmail());
-        member.setPassword(member.getPassword());
-        member.setAddress(member.getAddress());
+        member.setEmail(memberFormDto.getEmail());
+        String pwd=passwordEncoder.encode(memberFormDto.getPassword());
+        member.setPassword(pwd);
+        member.setRole(Role.USER);
+        member.setAddress(memberFormDto.getAddress());
+
 
         return member;
+    }
+    public static Member createAdmin(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
+        Member admin=new Member();
+        admin.setName(memberFormDto.getName());
+        admin.setEmail(memberFormDto.getEmail());
+        String pwd=passwordEncoder.encode(memberFormDto.getPassword());
+        admin.setPassword(pwd);
+        admin.setRole(Role.ADMIN);
+        admin.setAddress(memberFormDto.getAddress());
+
+        return admin;
     }
 
 

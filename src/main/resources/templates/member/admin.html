@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- 관리자 페이지 버튼 -->
+<sec:authorize access="hasRole('ADMIN')">
+    <p>관리자만 이 페이지를 볼 수 있습니다!</p>
+</sec:authorize>
+
+</body>
+</html>
