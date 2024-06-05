@@ -21,16 +21,16 @@ public class MemberService implements UserDetailsService{
     private final MemberRepository memberRepository;
 
     //회원가입
-    public void saveAdmin(Member member) {
+    public Member saveAdmin(Member member){
         member.setRole(Role.ADMIN);
-        if (Objects.equals(member.getRole().toString(), "ADMIN")) {
-            memberRepository.save(member);
-        }
+        validateDuplicateMember(member);
+        return memberRepository.save(member); //save자체로 member를 반환
     }
     public Member saveMember(Member member){
         validateDuplicateMember(member);
         return memberRepository.save(member); //save자체로 member를 반환
     }
+
 
 
     private void validateDuplicateMember(Member member) {

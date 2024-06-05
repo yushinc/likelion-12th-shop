@@ -71,7 +71,6 @@ public class MemberController {
         }
         try {
             Member admin = Member.createAdmin(memberFormDto, passwordEncoder);
-            admin.setRole(Role.ADMIN);
             memberService.saveAdmin(admin);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
