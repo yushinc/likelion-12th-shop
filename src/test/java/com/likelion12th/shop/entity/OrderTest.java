@@ -67,7 +67,7 @@ class OrderTest {
 
             OrderItem orderItem = new OrderItem();
             orderItem.setItem(item);
-            orderItem.setOrderQuantity(1);
+            // orderItem.setOrderQuantity(1);
             orderItem.setOrderPrice(1000);
             order.addOrderItem(orderItem); // 주문에 주문 상품 추가
 
@@ -85,7 +85,7 @@ class OrderTest {
     @DisplayName("고아객체 제거 테스트")
     public void orphanRemovalTest() {
         Order order = this.createOrder();
-        order.getOrderItemList().remove(0);
+        order.getOrderItems().remove(0);
         em.flush();
     }
 
@@ -100,7 +100,7 @@ class OrderTest {
             // orderItem 생성
             OrderItem orderItem = new OrderItem();
             orderItem.setItem(item);
-            orderItem.setOrderQuantity(1);
+            // orderItem.setOrderQuantity(1);
             orderItem.setOrderPrice(1000);
             order.addOrderItem(orderItem); // order의 주문 상품에 추가
         }
@@ -130,7 +130,7 @@ class OrderTest {
     @DisplayName("지연 로딩 테스트")
     public void lazyLoadingTest() {
         Order order = this.createOrder();
-        Long orderItemId = order.getOrderItemList().get(0).getId();
+        Long orderItemId = order.getOrderItems().get(0).getId();
         em.flush();
         em.clear();
 

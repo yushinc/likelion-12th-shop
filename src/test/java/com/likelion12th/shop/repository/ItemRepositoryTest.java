@@ -15,6 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,9 @@ public class ItemRepositoryTest {
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -141,7 +145,7 @@ public class ItemRepositoryTest {
         memberFormDto.setAddress("123 Street, City");
 
         // When
-        Member member = Member.createMember(memberFormDto);
+        Member member = Member.createMember(memberFormDto, passwordEncoder);
         member.setRole(Role.USER); // Optional: Set the role if needed
         Member savedMember = memberRepository.save(member);
 

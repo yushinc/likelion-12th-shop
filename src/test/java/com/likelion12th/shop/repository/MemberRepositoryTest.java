@@ -1,13 +1,13 @@
 package com.likelion12th.shop.repository;
 
 import com.likelion12th.shop.entity.Member;
-import com.likelion12th.shop.entity.Product;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
 

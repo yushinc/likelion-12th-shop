@@ -6,7 +6,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -31,16 +34,34 @@ public class Member extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private LocalDateTime createdBy;
-    private LocalDateTime modifiedBy;
- public static Member createMember(MemberFormDto memberFormDto) {
-    Member member = new Member();
-    member.setName(memberFormDto.getName()); // 이름
-    member.setEmail(memberFormDto.getEmail());// 이메일
-    member.setPassword(memberFormDto.getPassword());// 비밀번호
-    member.setAddress(memberFormDto.getAddress());// 주소
+    @CreatedBy
+    private String createdBy;
 
-    return member;
+    @LastModifiedBy
+    private String modifiedBy;
+
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
+        Member member = new Member();
+        member.setName(memberFormDto.getName()); // 이름
+        member.setEmail(memberFormDto.getEmail());// 이메일
+        String pwd = passwordEncoder.encode(memberFormDto.getPassword());// 비밀번호
+        member.setPassword(pwd);
+        member.setRole(Role.USER); // 역할 설정
+        member.setAddress(memberFormDto.getAddress()); // 주소
+        return member;
+    }
+
+    public static Member createAdmin(MemberFormDto memberFormDto,
+                                     PasswordEncoder passwordEncoder) {
+        Member admin = new Member();
+        admin.setName(memberFormDto.getName());
+        admin.setEmail(memberFormDto.getEmail());
+        String pwd = passwordEncoder.encode(memberFormDto.getPassword());// 비밀번호
+        admin.setPassword(pwd);
+        admin.setRole(Role.ADMIN);
+        admin.setAddress(memberFormDto.getAddress());
+
+        return admin;
     }
 
     public void setMemberName(String 테스트_회원) {
