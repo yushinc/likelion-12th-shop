@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 회원가입</title>
+</head>
+<body>
+<h1>관리자 회원가입</h1>
+    <form action="/members/admin" method="post" th:object="${memberFormDto}">
+        <div>
+            <label>이름</label>
+            <input type="text" th:field="*{name}" />
+        </div>
+        <div>
+            <label>이메일</label>
+            <input type="email" th:field="*{email}" />
+        </div>
+        <div>
+            <label>비밀번호</label>
+            <input type="password" th:field="*{password}" />
+        </div>
+        <div>
+            <label>주소</label>
+            <input type="text" th:field="*{address}" />
+        </div>
+        <div>
+            <button type="submit">Submit</button>
+        </div>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+    </form>
+</body>
+</html>
