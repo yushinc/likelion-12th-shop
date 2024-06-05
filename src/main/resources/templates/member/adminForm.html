@@ -5,11 +5,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>관리자 등록</title>
+    <title>관리자 회원가입</title>
 </head>
 <body>
-<h1>관리자 등록</h1>
-    <form action="/members/adminForm" method="post" th:object="${memberFormDto}">
+<h1>관리자 회원가입</h1>
+    <form action="/members/admin" method="post" th:object="${memberFormDto}">
         <div>
             <label>이름</label>
             <input type="text" th:field="*{name}" />
@@ -27,8 +27,9 @@
             <input type="text" th:field="*{address}" />
         </div>
         <div>
-            <button type="submit">등록</button>
+            <button type="submit">Submit</button>
         </div>
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
     </form>
 </body>
 </html>
