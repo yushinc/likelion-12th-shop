@@ -23,9 +23,9 @@ public class MemberRepositoryTest {
     public void createMember() {
         Member member = new Member();
         member.setName("염정");
-        member.setEmail("jung@likelion.com");
+        member.setEmail("jung123@naver.com");
         member.setPassword("jung0430");
-        member.setAddress("광명시");
+        member.setAddress("경기도 광명시");
 
         Member savedMember = memberRepository.save(member);
         System.out.println(savedMember.toString());

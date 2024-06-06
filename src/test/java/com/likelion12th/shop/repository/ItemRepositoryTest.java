@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -30,9 +31,13 @@ public class ItemRepositoryTest {
     @PersistenceContext
     private EntityManager em;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder; // PasswordEncoder 주입 추가
+
     private final ItemRepository itemRepository;
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
+
 
     @Autowired
     public ItemRepositoryTest(ItemRepository itemRepository, OrderRepository orderRepository, MemberRepository memberRepository) {
@@ -138,13 +143,13 @@ public class ItemRepositoryTest {
     public void testAuditing() {
         // Given
         MemberFormDto memberFormDto = new MemberFormDto();
-        memberFormDto.setName("John Doe");
-        memberFormDto.setEmail("john@example.com");
-        memberFormDto.setPassword("password123");
-        memberFormDto.setAddress("123 Street, City");
+        memberFormDto.setName("jung123");
+        memberFormDto.setEmail("ybt642537@gmail.com");
+        memberFormDto.setPassword("980906");
+        memberFormDto.setAddress("경기도 광명시");
 
         // When
-        Member member = Member.createMember(memberFormDto);
+        Member member = Member.createMember(memberFormDto, passwordEncoder);
         member.setRole(Role.USER); // Optional: Set the role if needed
         Member savedMember = memberRepository.save(member);
 

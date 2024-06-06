@@ -102,7 +102,7 @@ public class OrderTest {
 
         //회원 생성
         Member member = new Member();
-        member.setMemberName("테스트 회원");
+        member.setName("테스트 회원");
         order.setMember(member); // 주문과 회원을 연결
 
         //회원 저장

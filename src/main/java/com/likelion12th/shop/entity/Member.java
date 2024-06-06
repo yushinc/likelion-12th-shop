@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class) //선언 안했었음. 주의
 @Getter  @Setter
 @ToString
-public class Member extends BaseTime {
+public class Member extends Base {
 
     @Id
     @Column(name = "member_id")
@@ -29,22 +30,36 @@ public class Member extends BaseTime {
     private String password;
     private String address;
 
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     private LocalDateTime createdBy;
     private LocalDateTime modifiedBy;
 
-    public static Member createMember(MemberFormDto memberFormDto) {
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();
         member.setName(memberFormDto.getName());
         member.setEmail(memberFormDto.getEmail());
-        member.setPassword(memberFormDto.getPassword());
+        member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
+        member.setRole(Role.USER);
         member.setAddress(memberFormDto.getAddress());
 
         return member;
     }
 
-    public void setMemberName(String 테스트_회원) {
+    public static Member CreateAdminMember(MemberFormDto memberFormDto,
+                                           PasswordEncoder passwordEncoder) {
+
+        Member adminmember = new Member();
+        adminmember.setName(memberFormDto.getName());
+        adminmember.setEmail(memberFormDto.getEmail());
+        adminmember.setAddress(memberFormDto.getAddress());
+        String password = passwordEncoder.encode(memberFormDto.getPassword());
+        adminmember.setPassword(password);
+        adminmember.setRole(Role.ADMIN);
+        return adminmember;
     }
 }
+
+
