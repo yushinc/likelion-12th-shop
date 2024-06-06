@@ -77,7 +77,7 @@ class OrderTest {
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);
 
-            order.getOrderItems().add(orderItem);
+            order.getOrderItemList().add(orderItem);
             //Order 객체에 OrderItem을 추가
         }
 
@@ -92,7 +92,7 @@ class OrderTest {
                 .orElseThrow(EntityNotFoundException::new);
         //저장된 Order를 조회하여 가져옴
 
-        assertEquals(3, savedOrder.getOrderItems().size());
+        assertEquals(3, savedOrder.getOrderItemList().size());
         //저장된 Order의 OrderItem의 개수가 예상과 일치하는 지 확인
     }
 
@@ -100,7 +100,7 @@ class OrderTest {
     @DisplayName("고아객체 제거 테스트")
     public void orphanRemovalTest() {
         Order order = this.createOrder();
-        order.getOrderItems().remove(0);
+        order.getOrderItemList().remove(0);
         //Order에서 첫번째 OrderItem을 제거
         
         em.flush();
@@ -128,7 +128,7 @@ class OrderTest {
             orderItem.setOrder(order);
 
             //order의 주문 상품에 추가
-            order.getOrderItems().add(orderItem);
+            order.getOrderItemList().add(orderItem);
         }
         
         //여기부터
@@ -150,7 +150,7 @@ class OrderTest {
     @DisplayName("지연 로딩 테스트")
     public void lazyLoadingTest() {
         Order order = this.createOrder();
-        Long orderItemId = order.getOrderItems().get(0).getId();
+        Long orderItemId = order.getOrderItemList().get(0).getId();
         //생성된 Order에서 첫번째 OrderItem의 ID를 가져옴
 
         em.flush();

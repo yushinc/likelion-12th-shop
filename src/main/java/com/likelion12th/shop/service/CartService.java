@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.likelion12th.shop.entity.QCart.cart;
 
 @Service
 @Transactional

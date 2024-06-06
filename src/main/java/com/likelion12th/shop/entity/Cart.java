@@ -3,6 +3,8 @@ package com.likelion12th.shop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,7 +28,9 @@ public class Cart {
     @OneToMany(mappedBy = "cart")
     private List<CartItem> cartItems;
 
+    @CreatedBy
     private LocalDateTime createdBy;
+    @LastModifiedBy
     private LocalDateTime modifiedBy;
 
     public static Cart createCart(Member member){

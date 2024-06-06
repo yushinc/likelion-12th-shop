@@ -3,6 +3,8 @@ package com.likelion12th.shop.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +29,10 @@ public class OrderItem {
 
     private Integer orderPrice;
     private Integer count;
+
+    @CreatedBy
     private LocalDateTime createdBy;
+    @LastModifiedBy
     private LocalDateTime modifiedBy;
 
     //주문할 상품과 수량으로 OrderItem 객체를 만드는 메소드

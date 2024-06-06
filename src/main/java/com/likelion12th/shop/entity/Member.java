@@ -6,6 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class Member {
+public class Member extends Base {
 
     @Id
     @Column(name="member_id")
@@ -32,18 +35,19 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private LocalDateTime createdBy;
-    private LocalDateTime modifiedBy;
+    //private String createdBy;
+    //private String modifiedBy;
 
 
 //엔티티 생성 메소드
-    public static Member createMember(MemberFormDto memberFormDto){
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder){
         Member member= new Member();
         member.setName(memberFormDto.getName());
         member.setEmail(memberFormDto.getEmail());
-        member.setPassword(memberFormDto.getPassword());
+        String pwd= passwordEncoder.encode(memberFormDto.getPassword());
+        member.setPassword(pwd);
+        member.setRole(Role.ADMIN);
         member.setAddress(memberFormDto.getAddress());
-
 
         return member;
     }
