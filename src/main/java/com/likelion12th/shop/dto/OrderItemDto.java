@@ -1,7 +1,5 @@
 package com.likelion12th.shop.dto;
 
-import com.likelion12th.shop.constant.OrderStatus;
-import com.likelion12th.shop.entity.Order;
 import com.likelion12th.shop.entity.OrderItem;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
