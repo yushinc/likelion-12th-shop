@@ -7,16 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "member")
-@EntityListeners(value = {AuditingEntityListener.class})
 @Getter
 @Setter
 @ToString
-public class Member extends BaseTime {
+@EntityListeners(AuditingEntityListener.class)
+public class Member extends Base {
 
     @Id
     @Column(name = "member_id")
@@ -35,11 +36,13 @@ public class Member extends BaseTime {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public static Member createMember(MemberFormDto memberFormDto) {
+    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
         Member member = new Member();
         member.setName(memberFormDto.getName());
         member.setAddress(memberFormDto.getAddress());
-        member.setPassword(memberFormDto.getPassword());
+        String pwd = passwordEncoder.encode(memberFormDto.getPassword());
+        member.setPassword(pwd);
+        member.setRole(Role.USER);
         member.setEmail(memberFormDto.getEmail());
 
         return member;
