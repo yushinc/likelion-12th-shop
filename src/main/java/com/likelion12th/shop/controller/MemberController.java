@@ -77,7 +77,7 @@ public class MemberController {
         return "member/admin";
     }
 
-    // 요청 시 관리자 페이지로 이동
+    // 관리자 권한 검사 실패
     @GetMapping("/admin/error")
     public String adminError(Model model, HttpServletRequest request) {
 
