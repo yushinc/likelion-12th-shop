@@ -20,5 +20,4 @@
     <button type="button" class="btn btn-primary" sec:authorize="hasRole('ADMIN')" onClick="location.href='/members/admin'">관리자 페이지</button>
 </div>
 
-<p th:if="${adminErrorMsg}" class="error" th:text="${adminErrorMsg}"></p>
 </html>
