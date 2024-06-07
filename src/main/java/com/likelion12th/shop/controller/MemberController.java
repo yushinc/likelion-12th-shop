@@ -76,16 +76,5 @@ public class MemberController {
     public String admin() {
         return "member/admin";
     }
-
-    // 관리자 권한 검사 실패
-    @GetMapping("/admin/error")
-    public String adminError(Model model, HttpServletRequest request) {
-
-        CsrfToken csrfToken = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
-        model.addAttribute("_csrf", csrfToken);
-
-        model.addAttribute("adminErrorMsg", "관리자 권한이 없습니다.");
-        return "member/memberLoginForm";
-    }
 }
 

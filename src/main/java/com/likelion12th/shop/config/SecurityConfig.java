@@ -46,6 +46,7 @@ public class SecurityConfig {
         http
                 .exceptionHandling(error -> error
                         .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandle())
                 );
 
         // CSRF 보호 기능을 활성화하고, CSRF 토큰을 쿠키에 저장하도록 구성
